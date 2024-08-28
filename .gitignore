@@ -1,6 +1,9 @@
 .csv
-.env
+cmd/.env
 .txt
 .ipynb
 .py
 .txt
+.json
+
+
