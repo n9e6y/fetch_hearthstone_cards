@@ -2,8 +2,7 @@ package main
 
 import (
 	"HS/internal/api"
-	"HS/internal/csv"
-	"HS/internal/json"
+	"HS/internal/collect"
 	"fmt"
 	"github.com/joho/godotenv"
 	"log"
@@ -17,37 +16,33 @@ func main() {
 		log.Fatal("Error loading env")
 	}
 
-	apiURL := os.Getenv("API_URL")
-	expandedAPIURL := os.Getenv("EXPANDED_API_URL")
-	if apiURL == "" || expandedAPIURL == "" {
-		log.Fatal("API_URL or EXPANDED_API_URL not set in .env file")
+	cardsURL := os.Getenv("CARDS_API")
+	colcardsURL := os.Getenv("COLLECTABLE_CARDS_API")
+	if cardsURL == "" || colcardsURL == "" {
+		log.Fatal("vars not in env file")
 	}
 
-	//if expandedAPIURL == "" {
-	//	log.Fatalf("error")
-	//}
-
-	//Fetch and save regular cards
-	cards, err := api.FetchCards(apiURL)
+	//Fetch and collect regular cards
+	cards, err := api.FetchCards(cardsURL)
 	if err != nil {
 		log.Fatalf("Error fetching cards: %v", err)
 	}
 
-	err = csv.WriteCardsToCSV(cards, "cards.csv")
+	err = collect.WriteCardsToCSV(cards, "cards.save")
 	if err != nil {
 		log.Fatalf("Error writing cards to CSV: %v", err)
 	}
 
-	fmt.Printf("Successfully wrote %d cards to cards.csv\n", len(cards))
+	fmt.Printf("Successfully wrote %d cards to cards.save\n", len(cards))
 
-	// Fetch and save expanded cards
-	expandedCards, err := api.FetchExpandedCards(expandedAPIURL)
+	// Fetch and collect collectable cards
+	expandedCards, err := api.FetchCollectableCards(colcardsURL)
 	if err != nil {
 		log.Fatalf("Error fetching expanded cards: %v", err)
 	}
 
-	err = json.WriteExpandedCardsToJSON(expandedCards, "expanded_cards.json")
+	err = collect.WriteCardsToJSON(expandedCards, "cards.json")
 	if err != nil {
-		log.Fatalf("Error writing expanded cards to JSON: %v", err)
+		log.Fatalf("Error writing cards to JSON: %v", err)
 	}
 }
