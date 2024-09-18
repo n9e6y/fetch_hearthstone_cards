@@ -28,7 +28,7 @@ func main() {
 		log.Fatalf("Error fetching cards: %v", err)
 	}
 
-	err = collect.WriteCardsToCSV(cards, "cards.save")
+	err = collect.WriteCardsToCSV(cards, "cards.csv")
 	if err != nil {
 		log.Fatalf("Error writing cards to CSV: %v", err)
 	}
